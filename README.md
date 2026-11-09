@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Session 1 lab files
 
-## Getting Started
+The code of Lab 1, Lab 2 and the project proposal, as plain files. Copy the code from here rather than from the handout or the slides: copying from a rendered page can break quotes, line breaks and indentation.
 
-First, run the development server:
+The folders match the folders of your `movie-night` project. Copy each file to the same path in your project when the lab asks for it.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Lab 1
+
+| Step | File in this folder | What to do in your project |
+|---|---|---|
+| 4 | `app/page.tsx` | Replace the content of `app/page.tsx` |
+| 5 | `app/about/page.tsx` | Create `app/about/page.tsx` |
+
+Step 5, in `app/layout.tsx`: replace the `metadata` object with this one.
+
+```tsx
+export const metadata: Metadata = {
+  title: "Movie Night",
+  description: "Pick the movie for our next movie night",
+};
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Lab 2
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Part | File in this folder | What to do in your project |
+|---|---|---|
+| A | `data/movies.json` | Create `data/movies.json` |
+| A | `lib/movies.ts` | Create `lib/movies.ts` |
+| A | `components/movie-list.tsx` | Create `components/movie-list.tsx` |
+| B | `app/movies/page.tsx` | Create `app/movies/page.tsx` |
+| F | `app/movies-client/page.tsx` | Create `app/movies-client/page.tsx` |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Part E, in `app/movies/page.tsx`: add this line just below the imports.
 
-## Learn More
+```tsx
+export const dynamic = "force-dynamic";
+```
 
-To learn more about Next.js, take a look at the following resources:
+Part F: copy `data/movies.json` of your project into its `public/` folder.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Stretch goal S1: replace the Part E line with this one.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```tsx
+export const revalidate = 10;
+```
 
-## Deploy on Vercel
+## Project proposal
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`PROPOSAL.md` is the template of your project proposal. Create your own project in a new folder next to `movie-night`, not inside it. Copy the template to the root of your project, fill it in, then commit and push it before session 2.
