@@ -74,3 +74,17 @@
 ## Under npm run dev, "Loading the movies..." appears when you open /movies/2. Under npm start it does not, but it still appears on /movies. Why?
 - Every page is rendered on request, even those with generateStaticParams. Opening /movies/2 runs getMovie, which calls getMovies and its 1-second delay. While the server waits, Next.js shows the loading.tsx fallback (“Loading the movies...”) because the movie page sits inside app/movies/.
 - /movies/2 was prerendered at build time (● in the table). Its result already exists, so getMovie doesn’t run. The page is served immediately, and the fallback has no time to appear. Link also prefetches static pages in production, so the page is often already in the browser before you click.
+
+# Q&A Lab 4
+
+## After npm run build with the API running, the terminal of the API shows 7 calls. Which calls are they? generateMetadata and the page of a movie both call getMovie: why does the API receive only one call for each movie?
+- After npm run build with the API running, the API receives 7 calls. One is GET /api/movies, from getMovies() in generateStaticParams of /movies [id]: it gets the list of ids so Next.js knows which pages to prerender. The other six are GET /api/movies/1 to /api/movies/6, one getMovie(id) call for each prerendered movie page (the ● routes). /movies is dynamic (ƒ), so the build does not render it and does not call the API for it.
+- **generateMetadata** and the page both call getMovie(id), but the API receives only one call per movie because of request memoization. During one render of a route, Next.js remembers each fetch with the same URL and options.
+
+## In break 3, where did the value of MOVIES_API_KEY end up, who can read it, and where should the key be used instead?
+- In break 3, the value abc123 ended up in the HTML of the prerendered movie pages (.next/server/app/movies/...), not in the JavaScript in .next/static. A Client Component is also rendered on the server, during the build here, and on the server every variable in .env.local exists, so the key was written into the page as text. That HTML is sent to every visitor, so anyone can read it.
+- The key should be used only in server-only code, in lib/movies.ts next to MOVIES_API_URL, in a header of the fetch to the API. That file has import "server-only", so a Client Component can’t use it.
+
+## Explain in your own words why Next.js refuses a function as a prop (break 1) and a server-only import in a Client Component (break 2).
+- The movie page is a Server Component and it runs on the server but ShortlistButton runs in the browser. To give the button its props, Next.js writes them into the RSC payload, which can only hold data that can be serialized: strings, numbers, arrays, objects. A function is code that lives in the server’s memory, so it can’t be written into the payload, even an empty one like () => {}. Next.js therefore stops the build.
+- Break 2, a server-only import: Everything a Client Component imports and uses is bundled into the JavaScript sent to the browser. lib/movies.ts is server code: it reads process.env.MOVIES_API_URL and calls an API that only the server can reach. In the browser it wouldn’t work, and it would expose server code and addresses. import "server-only" turns this mistake into a build error instead of a hidden bug. With only the import and no call and the build passes, because the unused import is dropped and nothing goes into the bundle.
