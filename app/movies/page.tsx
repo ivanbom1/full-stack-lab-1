@@ -2,15 +2,15 @@ import type { Metadata } from "next";
 import { MovieList } from "@/components/movie-list";
 import { getMovies } from "@/lib/movies";
 
-export const dynamic = "force-dynamic";
-
 export const metadata: Metadata = {
   title: "Movies | Movie Night",
   description: "The movies you can vote for",
 };
 
 export default async function MoviesPage() {
-  const movies = await getMovies();
+  // ISR: prerendered at build time, then regenerated in the background at most
+  // every 10 seconds, after a request (○ with "10s" in the build output)
+  const movies = await getMovies({ next: { revalidate: 10 } });
   console.log(`[movies] rendered ${movies.length} movies`);
 
   return (
