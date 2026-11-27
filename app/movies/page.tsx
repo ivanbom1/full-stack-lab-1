@@ -7,12 +7,13 @@ export const metadata: Metadata = {
   description: "The movies you can vote for",
 };
 
-export default async function MoviesPage() {
-  // ISR: prerendered at build time, then regenerated in the background at most
-  // every 10 seconds, after a request (○ with "10s" in the build output)
-  const movies = await getMovies({ next: { revalidate: 10 } });
-  console.log(`[movies] rendered ${movies.length} movies`);
+// ISR: prerendered at build time, then regenerated in the background at most
+// every 10 seconds, after a request (○ with "10s" in the build output)
+export const revalidate = 10;
 
+export default async function MoviesPage() {
+  const movies = await getMovies();
+  
   return (
     <main className="mx-auto w-full max-w-2xl p-8">
       <h1 className="text-3xl font-bold">Movies</h1>

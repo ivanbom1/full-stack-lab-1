@@ -2,6 +2,10 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { TopMovies } from "@/components/top-movies";
 
+// SSR: the data layer reads files, not fetch, so the strategy comes from the
+// route config. Rendered on every request (ƒ in the build output).
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <main className="mx-auto w-full max-w-2xl p-8">
